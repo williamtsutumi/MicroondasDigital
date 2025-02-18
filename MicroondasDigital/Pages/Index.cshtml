@@ -4,7 +4,49 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<script>
+    var app = angular.module('microondasModule', ['$scope', '$http']);
+    app.controller('microondasController', function($scope, $http) {
+
+        $scope.submit = function() {
+            var tempoInt = parseInt($scope.tempo);
+            var potenciaInt = parseIten($scope.potencia);
+
+            var request = {
+                method: 'POST',
+                url: 'http://localhost:5144',
+                data: {
+                    tempo: tempoInt,
+                    potencia: potenciaInt
+                }
+            }
+            $http.post(request).then(
+                function() {
+
+                },
+                function() {
+
+                }
+            );
+        };
+    });
+</script>
+
+
+<div ng-app="microondasModule" ng-controller="microondasController">
+    <form ng-submit="submit()">
+        <div class="col-6 ">
+            <div class="row">
+                <label for="tempo">Tempo</label>
+                <input id="tempo" type="number" min="1" max="200" placeholder="Informe o tempo" ng-model="tempo"/>
+            </div>
+            <div class="row">
+                <label for="potencia">Potência</label>
+                <input id="potencia" type="number" min="1" max="10" placeholder="Informe a potência" ng-model="potencia"/>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn btn-success col-12 my-3">Iniciar</button>
+            </div>
+        </div>
+    </form>
 </div>

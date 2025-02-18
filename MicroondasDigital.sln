@@ -5,6 +5,8 @@ VisualStudioVersion = 17.13.35806.99 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroondasDigital", "MicroondasDigital\MicroondasDigital.csproj", "{8055EA69-76DB-49CC-8C8F-CCC0CF7E42A3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroondasDigital.api", "MicroondasDigital.api\MicroondasDigital.api.csproj", "{5D16E959-E925-42BD-8208-F437A9C17CA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{8055EA69-76DB-49CC-8C8F-CCC0CF7E42A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8055EA69-76DB-49CC-8C8F-CCC0CF7E42A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8055EA69-76DB-49CC-8C8F-CCC0CF7E42A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D16E959-E925-42BD-8208-F437A9C17CA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D16E959-E925-42BD-8208-F437A9C17CA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D16E959-E925-42BD-8208-F437A9C17CA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D16E959-E925-42BD-8208-F437A9C17CA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
