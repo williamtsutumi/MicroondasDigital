@@ -15,59 +15,29 @@ app.controller('microondasController', function ($scope, $http) {
             function (response) {
                 $scope.programasPadroes = response.data;
                 $scope.programasPadroes.forEach((prog) => {
-                    var tempoInt = parseInt(prog.tempo.split(":")[1]) * 60 + parseInt(prog.tempo.split(":")[2]);
-                    prog.tempo = tempoInt;
+                    prog.tempo = parseInt(prog.tempo.split(":")[1]) * 60 + parseInt(prog.tempo.split(":")[2]);
                 });
             },
             function (response) {
                 console.log(response);
             }
         );
-    }
 
-    function makeRequest(tempo, potencia, nomeDoPrograma) {
         var request = {
-            method: 'POST',
-            url: 'http://localhost:5144/Microondas/',
-            data: {
-                tempo: tempo,
-                potencia: potencia,
-                nomeDoPrograma: nomeDoPrograma
-            }
+            method: 'GET',
+            url: 'http://localhost:5144/Programa/all-custom'
         };
-        if (isNaN(tempo) && isNaN(potencia))
-            request.url += "inicio-rapido";
-        else if ($scope.estaAquecendo) {
-            $scope.progresso = " ";
-            request.url += "acrescento";
-        }
-        else {
-            $scope.progresso = " ";
-            request.url += "iniciar";
-        }
-        return request;
-    }
-
-    function setAquecimentoInterval(stringAquecimento) {
-        clearInterval($scope.interval);
-
-        $scope.interval = setInterval(() => {
-            $scope.progresso = $scope.progresso + " " + stringAquecimento.repeat($scope.potencia);
-            $scope.tempo--;
-            $scope.$apply();
-        }, 1000);
-
-        setTimeout(() => {
-            clearInterval($scope.interval);
-            if ($scope.tempo == 0) {
-                $scope.progresso += " Aquecimento concluído";
-                $scope.estaPausado = false;
-                $scope.estaAquecendo = false;
-                $scope.tempo = NaN;
-                $scope.potencia = NaN;
+        $http(request).then(
+            function (response) {
+                $scope.programasCustomizados = response.data.programas;
+                $scope.programasCustomizados.forEach((prog) => {
+                    prog.tempo = parseInt(prog.tempo.split(":")[1]) * 60 + parseInt(prog.tempo.split(":")[2]);
+                });
+            },
+            function (response) {
+                console.log(response);
             }
-            $scope.$apply();
-        }, 1000 * $scope.tempo);
+        );
     }
 
     $scope.submit = function (programa) {
@@ -132,5 +102,50 @@ app.controller('microondasController', function ($scope, $http) {
         $scope.estaPausado = true;
         $scope.estaAquecendo = false;
         clearInterval($scope.interval);
+    }
+
+    function makeRequest(tempo, potencia, nomeDoPrograma) {
+        var request = {
+            method: 'POST',
+            url: 'http://localhost:5144/Microondas/',
+            data: {
+                tempo: tempo,
+                potencia: potencia,
+                nomeDoPrograma: nomeDoPrograma
+            }
+        };
+        if (isNaN(tempo) && isNaN(potencia))
+            request.url += "inicio-rapido";
+        else if ($scope.estaAquecendo) {
+            $scope.progresso = " ";
+            request.url += "acrescento";
+        }
+        else {
+            $scope.progresso = " ";
+            request.url += "iniciar";
+        }
+        return request;
+    }
+
+    function setAquecimentoInterval(stringAquecimento) {
+        clearInterval($scope.interval);
+
+        $scope.interval = setInterval(() => {
+            $scope.progresso = $scope.progresso + " " + stringAquecimento.repeat($scope.potencia);
+            $scope.tempo--;
+            $scope.$apply();
+        }, 1000);
+
+        setTimeout(() => {
+            clearInterval($scope.interval);
+            if ($scope.tempo == 0) {
+                $scope.progresso += " Aquecimento concluído";
+                $scope.estaPausado = false;
+                $scope.estaAquecendo = false;
+                $scope.tempo = NaN;
+                $scope.potencia = NaN;
+            }
+            $scope.$apply();
+        }, 1000 * $scope.tempo);
     }
 });

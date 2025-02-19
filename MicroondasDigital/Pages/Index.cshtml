@@ -12,6 +12,9 @@
         <div class="row justify-content-between">
             <button ng-repeat="programa in programasPadroes" type="button" class="btn btn-warning col-2" ng-click="submit(programa)">{{ programa.nome }}</button>
         </div>
+        <div class="row justify-content-between mt-4">
+            <button ng-repeat="programa in programasCustomizados" type="button" class="btn btn-warning col-2" ng-click="submit(programa)"><i>{{ programa.nome }}</i></button>
+        </div>
         <div class="col-12 mt-4">
             <div class="row">
                 <label for="tempo">Tempo</label>
@@ -23,14 +26,14 @@
             </div>
             <div class="row justify-content-between my-3">
                 <button type="button" class="btn btn-danger col-5" ng-click="pausa()">Cancela/Pausa</button>
-                <button type="submit" class="btn btn-success col-5">Inicia</button>
+                <button type="submit" class="btn btn-success col-5" ng-disabled="blockInputs && estaAquecendo">Inicia</button>
             </div>
         </div>
     </form>
 
     <span class="row" ng-if="estaPausado">Processo de aquecimento pausado!</span>
     <span class="row" ng-if="estaAquecendo">Processo de aquecimento iniciado!</span>
-    <span class="row" ng-if="estaAquecendo || estaPausado">Progresso: <span ng-bind="progresso"></span></span>
+    <span class="row" ng-if="estaAquecendo || estaPausado || mostrarProgresso">Progresso: <span ng-bind="progresso"></span></span>
 
     <div ng-if="erro.length > 0">
         <span ng-bind="erro"></span>

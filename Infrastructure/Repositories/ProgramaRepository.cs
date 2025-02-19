@@ -18,7 +18,14 @@ public class ProgramaRepository : IProgramaRepository
         var result = JsonSerializer.Deserialize<IEnumerable<Programa>>(json);
 
         return (result == null) ? Enumerable.Empty<Programa>() : result;
-    }   
+    }
+
+    public IEnumerable<Programa> GetAllCustom()
+    {
+        var json = File.ReadAllText(PROGRAMAS_PATH);
+        var programasSalvos = JsonSerializer.Deserialize<IEnumerable<Programa>>(json);
+        return (programasSalvos == null) ? Enumerable.Empty<Programa>() : programasSalvos;
+    }
 
     // Implementação ruim de salvamento: necessita ler o .json inteiro para salvar um novo Programa.
     public void CreatePrograma(Programa programa)

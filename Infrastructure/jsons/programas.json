@@ -1,1 +1,1 @@
-[{"Nome":"string","Alimento":"string","Tempo":"00:00:00","Potencia":0,"StringAquecimento":"string","Instrucoes":"string"}]
+[{"Nome":"Vegetais","Alimento":"Vegetais e legumes","Tempo":"00:02:00","Potencia":4,"StringAquecimento":"!","Instrucoes":""},{"Nome":"Arroz","Alimento":"Arroz","Tempo":"00:02:30","Potencia":6,"StringAquecimento":"\u002B","Instrucoes":"Espalhe o arroz no prato e fa\u00E7a uma concavidade no centro para aquecimento uniforme"}]

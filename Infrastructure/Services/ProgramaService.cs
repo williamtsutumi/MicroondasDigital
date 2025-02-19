@@ -17,6 +17,11 @@ public class ProgramaService : IProgramaService
         return _repository.GetProgramasPadroes();
     }
 
+    public IEnumerable<Programa> GetAllCustom()
+    {
+        return _repository.GetAllCustom();
+    }
+
     public void CreatePrograma(Programa programa)
     {
         _repository.CreatePrograma(programa);
