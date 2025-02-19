@@ -11,6 +11,21 @@
         $scope.erro = "";
         $scope.estaAquecendo = false;
 
+        $scope.onInit = function() {
+            var request = {
+                method: 'GET',
+                url: 'http://localhost:5144/Programa/get-programas-padroes'
+            };
+            $http(request).then(
+                function(response) {
+                    $scope.programasPadroes = response.data;
+                },
+                function(response) {
+                    console.log(response);
+                }
+            );
+        }
+
         function getApiUrl() {
             var request = {
                 method: 'POST',
@@ -24,12 +39,10 @@
                 request.url += "acrescento";
             else if ($scope.tempo) {
                 $scope.progresso = " ";
-                $scope.mostrarStatus = true;
                 request.url += "iniciar";
             }
             else {
                 $scope.progresso = " ";
-                $scope.mostrarStatus = true;
                 request.url += "inicio-rapido";
             }
             return request;
@@ -50,18 +63,15 @@
                 if ($scope.tempoRestante == 0) {
                     $scope.progresso += " Aquecimento concluído";
                     $scope.estaPausado = false;
-                    
                     $scope.estaAquecendo = false;
                     $scope.tempo = undefined;
                     $scope.potencia = undefined;
                 }
-
                 $scope.$apply();
             }, 1000 * $scope.tempoRestante);
         }
 
         $scope.submit = function() {
-            $scope.statusText = "Processo de aquecimento iniciado!";
             $scope.erro = "";
 
             setAquecimentoInterval()
@@ -95,9 +105,8 @@
         $scope.pausa = function() {
             if ($scope.estaPausado) {
                 $scope.estaPausado = false;
-                $scope.progresso = "";
                 $scope.estaAquecendo = false;
-                $scope.mostrarStatus = false;
+                $scope.progresso = "";
                 $scope.tempo = "";
                 $scope.potencia = "";
                 return;
@@ -105,11 +114,10 @@
             if (!$scope.estaAquecendo) {
                 $scope.tempo = "";
                 $scope.potencia = "";
-                $scope.mostrarStatus = false;
                 return;
             }
             $scope.estaPausado = true;
-            $scope.statusText = "Processo de aquecimento pausado!";
+            $scope.estaAquecendo = false;
             clearTimeout($scope.interval);
         }
     });
@@ -117,8 +125,11 @@
 
 
 <div ng-app="microondasModule" ng-controller="microondasController">
-    <form ng-submit="submit()">
-        <div class="col-6 ">
+    <form ng-submit="submit()" ng-init="onInit()">
+        <div class="row justify-content-between">
+            <button ng-repeat="programa in programasPadroes" type="button" class="btn btn-warning col-2" ng-click="submit(programa.nome)">{{ programa.nome }}</button>
+        </div>
+        <div class="col-12 mt-4">
             <div class="row">
                 <label for="tempo">Tempo</label>
                 <input id="tempo" type="number" min="1" max="200" placeholder="Informe o tempo (valor entre 1 e 200)" ng-model="tempo"/>
@@ -127,17 +138,16 @@
                 <label for="potencia">Potência</label>
                 <input id="potencia" type="number" min="1" max="10" placeholder="Informe a potência (valor entre 1 e 10)" ng-model="potencia"/>
             </div>
-            <div class="row justify-content-between">
-                <button type="button" class="btn btn-danger col-5 my-3" ng-click="pausa()">Cancela/Pausa</button>
-                <button type="submit" class="btn btn-success col-5 my-3">Inicia</button>
+            <div class="row justify-content-between my-3">
+                <button type="button" class="btn btn-danger col-5" ng-click="pausa()">Cancela/Pausa</button>
+                <button type="submit" class="btn btn-success col-5">Inicia</button>
             </div>
         </div>
     </form>
 
-    <div ng-if="mostrarStatus">
-        <span class="row" ng-bind="statusText"></span>
-        <span class="row">Progresso: <span ng-bind="progresso"></span></span>
-    </div>
+    <span class="row" ng-if="estaPausado">Processo de aquecimento pausado!</span>
+    <span class="row" ng-if="estaAquecendo">Processo de aquecimento iniciado!</span>
+    <span class="row" ng-if="estaAquecendo || estaPausado">Progresso: <span ng-bind="progresso"></span></span>
 
     <div ng-if="erro.length > 0">
         <span ng-bind="erro"></span>
