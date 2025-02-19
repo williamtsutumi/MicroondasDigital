@@ -11,4 +11,10 @@ public class Aquecimento
         Tempo = tempo;
         Potencia = potencia;
     }
+
+    public Aquecimento()
+    {
+        Tempo = new TimeSpan(0, 0, 0);
+        Potencia = 0;
+    }
 }

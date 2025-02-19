@@ -8,6 +8,8 @@
     var app = angular.module('microondasModule', []);
     app.controller('microondasController', function($scope, $http) {
 
+        $scope.tempo = NaN;
+        $scope.potencia = NaN;
         $scope.erro = "";
         $scope.estaAquecendo = false;
 
@@ -19,6 +21,10 @@
             $http(request).then(
                 function(response) {
                     $scope.programasPadroes = response.data;
+                    $scope.programasPadroes.forEach((prog) => {
+                        var tempoInt = parseInt(prog.tempo.split(":")[1]) * 60 + parseInt(prog.tempo.split(":")[2]);
+                        prog.tempo = tempoInt;
+                    });
                 },
                 function(response) {
                     console.log(response);
@@ -26,61 +32,67 @@
             );
         }
 
-        function getApiUrl() {
+        function makeRequest(tempo, potencia) {
             var request = {
                 method: 'POST',
                 url: 'http://localhost:5144/Microondas/',
                 data: {
-                    tempo: parseInt($scope.tempo),
-                    potencia: parseInt($scope.potencia)
+                    tempo: tempo,
+                    potencia: potencia
                 }
             };
-            if ($scope.estaAquecendo)
-                request.url += "acrescento";
-            else if ($scope.tempo) {
+            if (isNaN(tempo) && isNaN(potencia))
+                request.url += "inicio-rapido";
+            else if ($scope.estaAquecendo) {
                 $scope.progresso = " ";
-                request.url += "iniciar";
+                request.url += "acrescento";
             }
             else {
                 $scope.progresso = " ";
-                request.url += "inicio-rapido";
+                request.url += "iniciar";
             }
             return request;
         }
 
         function setAquecimentoInterval() {
+            clearInterval($scope.interval);
+
             $scope.interval = setInterval(() => {
                 $scope.progresso = $scope.progresso + " " + ".".repeat($scope.potencia);
                 $scope.tempoRestante--;
                 console.log($scope.tempoRestante);
                 $scope.$apply();
             }, 1000);
-        }
 
-        function setFinalizadoTimeout() {
             setTimeout(() => {
-                clearTimeout($scope.interval);
+                clearInterval($scope.interval);
                 if ($scope.tempoRestante == 0) {
                     $scope.progresso += " Aquecimento concluído";
                     $scope.estaPausado = false;
                     $scope.estaAquecendo = false;
-                    $scope.tempo = undefined;
-                    $scope.potencia = undefined;
+                    $scope.tempo = NaN;
+                    $scope.potencia = NaN;
                 }
                 $scope.$apply();
             }, 1000 * $scope.tempoRestante);
         }
 
-        $scope.submit = function() {
+        $scope.submit = function(programa) {
             $scope.erro = "";
 
-            setAquecimentoInterval()
-            setFinalizadoTimeout();
-
-            if ($scope.estaPausado)
+            if ($scope.estaPausado) {
+                clearInterval($scope.interval);
+                setAquecimentoInterval();
                 return;
+            }
 
-            $http(getApiUrl()).then(
+            var request;
+            if (programa != undefined)
+                request = makeRequest(programa.tempo, programa.potencia);
+            else
+                request = makeRequest(parseInt($scope.tempo), parseInt($scope.potencia));
+
+            $http(request).then(
                 function(response) {
                     var tempoSegundos = parseInt(response.data.tempo.split(":")[2]);
                     var tempoMinutos = parseInt(response.data.tempo.split(":")[1]);
@@ -93,8 +105,7 @@
                     $scope.potencia = response.data.potencia;
                     $scope.estaAquecendo = true;
 
-                    setAquecimentoInterval()
-                    setFinalizadoTimeout();
+                    setAquecimentoInterval();
                 },
                 function() {
                     $scope.erro = "Ocorreu algum erro inesperado!";
@@ -118,7 +129,7 @@
             }
             $scope.estaPausado = true;
             $scope.estaAquecendo = false;
-            clearTimeout($scope.interval);
+            clearInterval($scope.interval);
         }
     });
 </script>
@@ -127,7 +138,7 @@
 <div ng-app="microondasModule" ng-controller="microondasController">
     <form ng-submit="submit()" ng-init="onInit()">
         <div class="row justify-content-between">
-            <button ng-repeat="programa in programasPadroes" type="button" class="btn btn-warning col-2" ng-click="submit(programa.nome)">{{ programa.nome }}</button>
+            <button ng-repeat="programa in programasPadroes" type="button" class="btn btn-warning col-2" ng-click="submit(programa)">{{ programa.nome }}</button>
         </div>
         <div class="col-12 mt-4">
             <div class="row">

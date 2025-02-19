@@ -6,6 +6,6 @@ public interface IMicroondasService
 {
     Aquecimento Iniciar(int tempo, int? potencia);
     Aquecimento InicioRapido();
-    Aquecimento Acrescento(int tempo, int potencia);
+    Aquecimento Acrescento(int tempo, int potencia, string? nomeDoPrograma);
     Aquecimento Pausa(int tempo);
 }

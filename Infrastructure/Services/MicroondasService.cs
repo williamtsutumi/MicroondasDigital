@@ -26,8 +26,12 @@ public class MicroondasService : IMicroondasService
         return new Aquecimento(new TimeSpan(0, 0, 30), 10);
     }
 
-    public Aquecimento Acrescento(int tempo, int potencia)
+    public Aquecimento Acrescento(int tempo, int potencia, string? nomeDoPrograma)
     {
+        if (nomeDoPrograma != null)
+            return new Aquecimento();
+            //throw new Exception("Não é possível acrescentar tempo para programas pre-definidos");
+
         var timeSpan = GetTimeSpanFromTempo(tempo);
         timeSpan += TimeSpan.FromSeconds(30);
 
@@ -36,11 +40,7 @@ public class MicroondasService : IMicroondasService
 
     public Aquecimento Pausa(int tempo)
     {
-        return new Aquecimento(new TimeSpan(0, 0, 0), 0);
-        //if (jaEstaPausado)
-        //    return new Aquecimento(new TimeSpan(0, 0, 0), 0);
-        //else
-        //return new Aquecimento();
+        return new Aquecimento();
     }
 
     private TimeSpan GetTimeSpanFromTempo(int tempo)
