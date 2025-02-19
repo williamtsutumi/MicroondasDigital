@@ -19,6 +19,6 @@ public class ProgramaService : IProgramaService
 
     public void CreatePrograma(Programa programa)
     {
-
+        _repository.CreatePrograma(programa);
     }
 }

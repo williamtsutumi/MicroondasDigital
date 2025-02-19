@@ -29,7 +29,7 @@ public class MicroondasService : IMicroondasService
     public Aquecimento Acrescento(int tempo, int potencia, string? nomeDoPrograma)
     {
         if (nomeDoPrograma != null)
-            return new Aquecimento();
+            return new Aquecimento(GetTimeSpanFromTempo(tempo), potencia);
             //throw new Exception("Não é possível acrescentar tempo para programas pre-definidos");
 
         var timeSpan = GetTimeSpanFromTempo(tempo);

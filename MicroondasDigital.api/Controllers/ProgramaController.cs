@@ -1,6 +1,7 @@
 ﻿using Presentation.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Interfaces;
+using Domain.Entities;
 
 namespace Presentation.Controllers;
 
@@ -16,11 +17,18 @@ public class ProgramaController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreatePrograma([FromBody] ProgramaDTO viewModel)
+    public IActionResult CreatePrograma([FromBody] ProgramaDTO request)
     {
-        return Ok(new
+        _service.CreatePrograma(new Programa()
         {
+            Nome = request.Nome,
+            Alimento = request.Alimento,
+            Tempo = request.Tempo,
+            Potencia = request.Potencia,
+            StringAquecimento = request.StringAquecimento,
+            Instrucoes = request.Instrucoes
         });
+        return Ok();
     }
 
     [HttpGet("get-programas-padroes")]

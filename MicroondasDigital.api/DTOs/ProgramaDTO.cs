@@ -6,6 +6,7 @@ public record ProgramaDTO
     public string Alimento { get; set; }
     public TimeSpan Tempo { get; set; }
     public int Potencia { get; set; }
-    public string Instrucoes { get; set; }
+    public string StringAquecimento { get; set; }
+    public string? Instrucoes { get; set; }
 
 }

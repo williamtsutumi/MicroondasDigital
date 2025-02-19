@@ -25,13 +25,14 @@ app.controller('microondasController', function ($scope, $http) {
         );
     }
 
-    function makeRequest(tempo, potencia) {
+    function makeRequest(tempo, potencia, nomeDoPrograma) {
         var request = {
             method: 'POST',
             url: 'http://localhost:5144/Microondas/',
             data: {
                 tempo: tempo,
-                potencia: potencia
+                potencia: potencia,
+                nomeDoPrograma: nomeDoPrograma
             }
         };
         if (isNaN(tempo) && isNaN(potencia))
@@ -70,22 +71,26 @@ app.controller('microondasController', function ($scope, $http) {
     }
 
     $scope.submit = function (programa) {
+        if (programa !== undefined)
+            $scope.programa = programa;
+
         $scope.erro = "";
 
         if ($scope.estaPausado) {
             $scope.estaPausado = false;
             $scope.estaAquecendo = true;
-            setAquecimentoInterval(programa === undefined ? "." : programa.stringAquecimento);
+            setAquecimentoInterval($scope.programa === undefined ? "." : $scope.programa.stringAquecimento);
             return;
         }
 
         var request;
         if (programa != undefined) {
             $scope.blockInputs = true;
-            request = makeRequest(programa.tempo, programa.potencia);
+            request = makeRequest(programa.tempo, programa.potencia, programa.nome);
         }
-        else
-            request = makeRequest(parseInt($scope.tempo), parseInt($scope.potencia));
+        else {
+            request = makeRequest(parseInt($scope.tempo), parseInt($scope.potencia), $scope.programa === undefined ? undefined : $scope.programa.nome);
+        }
 
         $http(request).then(
             function (response) {
@@ -113,6 +118,7 @@ app.controller('microondasController', function ($scope, $http) {
             $scope.estaPausado = false;
             $scope.estaAquecendo = false;
             $scope.blockInputs = false;
+            $scope.programa = undefined;
             $scope.progresso = "";
             $scope.tempo = "";
             $scope.potencia = "";
