@@ -14,18 +14,18 @@
 
             var request = {
                 method: 'POST',
-                url: 'http://localhost:5144',
+                url: 'http://localhost:5144/Microondas/iniciar',
                 data: {
                     tempo: tempoInt,
                     potencia: potenciaInt
                 }
             }
-            $http.post(request).then(
-                function() {
-
+            $http(request).then(
+                function(response) {
+                    console.log(response);
                 },
-                function() {
-
+                function(response) {
+                    console.log(response);
                 }
             );
         };
@@ -44,8 +44,9 @@
                 <label for="potencia">Potência</label>
                 <input id="potencia" type="number" min="1" max="10" placeholder="Informe a potência (valor entre 1 e 10)" ng-model="potencia"/>
             </div>
-            <div class="row">
-                <button type="submit" class="btn btn-success col-12 my-3">Iniciar</button>
+            <div class="row justify-content-between">
+                <button type="submit" class="btn btn-danger col-5 my-3">Cancela/Pausa</button>
+                <button type="submit" class="btn btn-success col-5 my-3">Inicia</button>
             </div>
         </div>
     </form>

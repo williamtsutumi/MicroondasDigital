@@ -1,11 +1,14 @@
 using Presentation.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Interfaces;
+using Domain.Entities;
+using Microsoft.AspNetCore.Cors;
 
 namespace Presentation.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[EnableCors("MyPolicy")] // Configuração CORS local no controller. Idealmente seria global, mas estou com pouco tempo!
 public class MicroondasController : ControllerBase
 {
 
@@ -17,13 +20,35 @@ public class MicroondasController : ControllerBase
     }
 
     [HttpPost("iniciar")]
-    public IActionResult Iniciar([FromBody] IniciarAquecimentoDTO viewModel)
+    public IActionResult Iniciar([FromBody] IniciarAquecimentoDTO request)
     {
-        var result = _service.Iniciar(viewModel.Tempo, viewModel.Potencia);
+        Aquecimento result = _service.Iniciar(request.Tempo, request.Potencia);
         return Ok(new
         {
-            Tempo = result.Item1,
-            Potencia = result.Item2
+            result.Tempo,
+            result.Potencia
+        });
+    }
+
+    [HttpPost("inicio-rapido")]
+    public IActionResult InicioRapido()
+    {
+        Aquecimento result = _service.InicioRapido();
+        return Ok(new
+        {
+            result.Tempo,
+            result.Potencia
+        });
+    }
+
+    [HttpPost("acrescento")]
+    public IActionResult Acrescento([FromBody] IniciarAquecimentoDTO request)
+    {
+        Aquecimento result = _service.Acrescento(request.Tempo, request.Potencia);
+        return Ok(new
+        {
+            result.Tempo,
+            result.Potencia
         });
     }
 }
