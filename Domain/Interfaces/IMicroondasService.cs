@@ -1,6 +1,10 @@
-﻿namespace Domain.Interfaces;
+﻿using Domain.Entities;
+
+namespace Domain.Interfaces;
 
 public interface IMicroondasService
 {
-    Tuple<int,int> Iniciar(int? tempo, int? potencia);
+    Aquecimento Iniciar(int tempo, int potencia);
+    Aquecimento InicioRapido();
+    Aquecimento Acrescento(int tempo, int potencia);
 }
