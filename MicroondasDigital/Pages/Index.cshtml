@@ -55,21 +55,17 @@
         }
 
         function setAquecimentoInterval(stringAquecimento) {
-            if (stringAquecimento === undefined)
-                stringAquecimento = '.';
-
             clearInterval($scope.interval);
 
             $scope.interval = setInterval(() => {
                 $scope.progresso = $scope.progresso + " " + stringAquecimento.repeat($scope.potencia);
-                $scope.tempoRestante--;
-                console.log($scope.tempoRestante);
+                $scope.tempo--;
                 $scope.$apply();
             }, 1000);
 
             setTimeout(() => {
                 clearInterval($scope.interval);
-                if ($scope.tempoRestante == 0) {
+                if ($scope.tempo == 0) {
                     $scope.progresso += " Aquecimento concluído";
                     $scope.estaPausado = false;
                     $scope.estaAquecendo = false;
@@ -77,21 +73,24 @@
                     $scope.potencia = NaN;
                 }
                 $scope.$apply();
-            }, 1000 * $scope.tempoRestante);
+            }, 1000 * $scope.tempo);
         }
 
         $scope.submit = function(programa) {
             $scope.erro = "";
 
             if ($scope.estaPausado) {
-                clearInterval($scope.interval);
-                setAquecimentoInterval(programa.stringAquecimento);
+                $scope.estaPausado = false;
+                $scope.estaAquecendo = true;
+                setAquecimentoInterval(programa === undefined ? "." : programa.stringAquecimento);
                 return;
             }
 
             var request;
-            if (programa != undefined)
+            if (programa != undefined) {
+                $scope.blockInputs = true;
                 request = makeRequest(programa.tempo, programa.potencia);
+            }
             else
                 request = makeRequest(parseInt($scope.tempo), parseInt($scope.potencia));
 
@@ -100,7 +99,7 @@
                     var tempoSegundos = parseInt(response.data.tempo.split(":")[2]);
                     var tempoMinutos = parseInt(response.data.tempo.split(":")[1]);
                     var tempoTotal = tempoSegundos + tempoMinutos * 60;
-                    $scope.tempoRestante = tempoTotal;
+                    $scope.tempo = tempoTotal;
 
                     if (!$scope.tempo)
                         $scope.tempo = tempoTotal;
@@ -108,7 +107,7 @@
                     $scope.potencia = response.data.potencia;
                     $scope.estaAquecendo = true;
 
-                    setAquecimentoInterval(programa.stringAquecimento);
+                    setAquecimentoInterval(programa === undefined ? "." : programa.stringAquecimento);
                 },
                 function() {
                     $scope.erro = "Ocorreu algum erro inesperado!";
@@ -120,6 +119,7 @@
             if ($scope.estaPausado) {
                 $scope.estaPausado = false;
                 $scope.estaAquecendo = false;
+                $scope.blockInputs = false;
                 $scope.progresso = "";
                 $scope.tempo = "";
                 $scope.potencia = "";
@@ -146,11 +146,11 @@
         <div class="col-12 mt-4">
             <div class="row">
                 <label for="tempo">Tempo</label>
-                <input id="tempo" type="number" min="1" max="200" placeholder="Informe o tempo (valor entre 1 e 200)" ng-model="tempo"/>
+                <input id="tempo" type="number" min="1" max="200" placeholder="Informe o tempo (valor entre 1 e 200)" ng-model="tempo" ng-disabled="blockInputs"/>
             </div>
             <div class="row">
                 <label for="potencia">Potência</label>
-                <input id="potencia" type="number" min="1" max="10" placeholder="Informe a potência (valor entre 1 e 10)" ng-model="potencia"/>
+                <input id="potencia" type="number" min="1" max="10" placeholder="Informe a potência (valor entre 1 e 10)" ng-model="potencia" ng-disabled="blockInputs"/>
             </div>
             <div class="row justify-content-between my-3">
                 <button type="button" class="btn btn-danger col-5" ng-click="pausa()">Cancela/Pausa</button>

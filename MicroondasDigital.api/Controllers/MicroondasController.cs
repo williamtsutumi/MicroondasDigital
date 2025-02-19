@@ -51,15 +51,4 @@ public class MicroondasController : ControllerBase
             result.Potencia
         });
     }
-
-    [HttpPost("pausa")]
-    public IActionResult Pausa([FromBody] IniciarAquecimentoDTO request)
-    {
-        Aquecimento result = _service.Acrescento(request.Tempo, request.Potencia.Value, request.NomeDoPrograma);
-        return Ok(new
-        {
-            result.Tempo,
-            result.Potencia
-        });
-    }
 }

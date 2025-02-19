@@ -38,11 +38,6 @@ public class MicroondasService : IMicroondasService
         return new Aquecimento(timeSpan, potencia);
     }
 
-    public Aquecimento Pausa(int tempo)
-    {
-        return new Aquecimento();
-    }
-
     private TimeSpan GetTimeSpanFromTempo(int tempo)
     {
         var tempoSegundos = 0;
