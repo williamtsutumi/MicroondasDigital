@@ -27,8 +27,11 @@
                 $scope.mostrarStatus = true;
                 request.url += "iniciar";
             }
-            else
+            else {
+                $scope.progresso = " ";
+                $scope.mostrarStatus = true;
                 request.url += "inicio-rapido";
+            }
             return request;
         }
 
@@ -61,11 +64,11 @@
             $scope.statusText = "Processo de aquecimento iniciado!";
             $scope.erro = "";
 
-            if ($scope.estaPausado) {
-                setAquecimentoInterval()
-                setFinalizadoTimeout();
+            setAquecimentoInterval()
+            setFinalizadoTimeout();
+
+            if ($scope.estaPausado)
                 return;
-            }
 
             $http(getApiUrl()).then(
                 function(response) {
@@ -94,6 +97,7 @@
                 $scope.estaPausado = false;
                 $scope.progresso = "";
                 $scope.estaAquecendo = false;
+                $scope.mostrarStatus = false;
                 $scope.tempo = "";
                 $scope.potencia = "";
                 return;
@@ -101,6 +105,7 @@
             if (!$scope.estaAquecendo) {
                 $scope.tempo = "";
                 $scope.potencia = "";
+                $scope.mostrarStatus = false;
                 return;
             }
             $scope.estaPausado = true;

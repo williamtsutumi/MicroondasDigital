@@ -1,6 +1,6 @@
 ﻿namespace Presentation.DTOs;
 
-public record CreateProgramaDTO
+public record ProgramaDTO
 {
     public string Nome { get; set; }
     public string Alimento { get; set; }

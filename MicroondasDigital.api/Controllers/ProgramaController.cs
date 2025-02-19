@@ -1,5 +1,6 @@
 ﻿using Presentation.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Domain.Interfaces;
 
 namespace Presentation.Controllers;
 
@@ -7,26 +8,25 @@ namespace Presentation.Controllers;
 [Route("[controller]")]
 public class ProgramaController : ControllerBase
 {
-    private readonly ILogger<ProgramaController> _logger;
+    private readonly IProgramaService _service;
 
-    public ProgramaController(ILogger<ProgramaController> logger)
+    public ProgramaController(IProgramaService service)
     {
-        _logger = logger;
+        _service = service;
     }
 
     [HttpPost]
-    public IActionResult CreatePrograma([FromBody] CreateProgramaDTO viewModel)
+    public IActionResult CreatePrograma([FromBody] ProgramaDTO viewModel)
     {
         return Ok(new
         {
         });
     }
 
-    [HttpGet("all")]
-    public IActionResult GetAll()
+    [HttpGet("get-programas-padroes")]
+    public IActionResult GetProgramasPadroes()
     {
-        return Ok(new
-        {
-        });
+        var result = _service.GetProgramasPadroes();
+        return Ok(result);
     }
 }

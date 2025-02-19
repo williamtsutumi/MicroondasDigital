@@ -1,0 +1,42 @@
+[
+  {
+    "Nome": "Pipoca",
+    "Alimento": "Pipoca (de micro-ondas)",
+    "Tempo": "0.00:3:00",
+    "Potencia": 7,
+    "StringAquecimento": "*",
+    "Instrucoes": "Observar o barulho de estouros do milho, caso houver um intervalo de mais de 10 segundos entre um estouro e outro, interrompa o aquecimento."
+  },
+  {
+    "Nome": "Leite",
+    "Alimento": "Leite",
+    "Tempo": "0.00:5:00",
+    "Potencia": 5,
+    "StringAquecimento": "&",
+    "Instrucoes": "Cuidado com aquecimento de l�quidos, o choque t�rmico aliado ao movimento do recipiente pode causar fervura imediata causando risco de queimaduras."
+  },
+  {
+    "Nome": "Carnes de boi",
+    "Alimento": "Carne em peda�o ou fatias",
+    "Tempo": "0.00:14:00",
+    "Potencia": 4,
+    "StringAquecimento": "@",
+    "Instrucoes": "Interrompa o processo na metade e vire o conte�do com a parte de baixo para cima para o descongelamento uniforme."
+  },
+  {
+    "Nome": "Frango",
+    "Alimento": "Frango (qualquer corte)",
+    "Tempo": "0.00:8:00",
+    "Potencia": 7,
+    "StringAquecimento": "#",
+    "Instrucoes": "Interrompa o processo na metade e vire o conte�do com a parte de baixo para cima para o, descongelamento uniforme."
+  },
+  {
+    "Nome": "Feij�o",
+    "Alimento": "Feij�o congelado",
+    "Tempo": "0.00:8:00",
+    "Potencia": 9,
+    "StringAquecimento": "$",
+    "Instrucoes": "Deixe o recipiente destampado e em casos de pl�stico, cuidado ao retirar o recipiente pois o mesmo pode perder resist�ncia em altas temperaturas."
+  }
+]

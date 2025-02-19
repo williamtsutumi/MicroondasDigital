@@ -12,9 +12,13 @@ public class ProgramaService : IProgramaService
         _repository = repository;
     }
 
+    public IEnumerable<Programa> GetProgramasPadroes()
+    {
+        return _repository.GetProgramasPadroes();
+    }
+
     public void CreatePrograma(Programa programa)
     {
-
 
     }
 }
