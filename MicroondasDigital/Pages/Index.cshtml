@@ -54,11 +54,14 @@
             return request;
         }
 
-        function setAquecimentoInterval() {
+        function setAquecimentoInterval(stringAquecimento) {
+            if (stringAquecimento === undefined)
+                stringAquecimento = '.';
+
             clearInterval($scope.interval);
 
             $scope.interval = setInterval(() => {
-                $scope.progresso = $scope.progresso + " " + ".".repeat($scope.potencia);
+                $scope.progresso = $scope.progresso + " " + stringAquecimento.repeat($scope.potencia);
                 $scope.tempoRestante--;
                 console.log($scope.tempoRestante);
                 $scope.$apply();
@@ -82,7 +85,7 @@
 
             if ($scope.estaPausado) {
                 clearInterval($scope.interval);
-                setAquecimentoInterval();
+                setAquecimentoInterval(programa.stringAquecimento);
                 return;
             }
 
@@ -105,7 +108,7 @@
                     $scope.potencia = response.data.potencia;
                     $scope.estaAquecendo = true;
 
-                    setAquecimentoInterval();
+                    setAquecimentoInterval(programa.stringAquecimento);
                 },
                 function() {
                     $scope.erro = "Ocorreu algum erro inesperado!";
