@@ -44,7 +44,18 @@ public class MicroondasController : ControllerBase
     [HttpPost("acrescento")]
     public IActionResult Acrescento([FromBody] IniciarAquecimentoDTO request)
     {
-        Aquecimento result = _service.Acrescento(request.Tempo, request.Potencia);
+        Aquecimento result = _service.Acrescento(request.Tempo, request.Potencia.Value);
+        return Ok(new
+        {
+            result.Tempo,
+            result.Potencia
+        });
+    }
+
+    [HttpPost("pausa")]
+    public IActionResult Pausa([FromBody] IniciarAquecimentoDTO request)
+    {
+        Aquecimento result = _service.Acrescento(request.Tempo, request.Potencia.Value);
         return Ok(new
         {
             result.Tempo,

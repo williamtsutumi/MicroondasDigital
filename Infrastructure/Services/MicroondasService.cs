@@ -5,33 +5,20 @@ namespace Infrastructure.Services;
 
 public class MicroondasService : IMicroondasService
 {
-    public Aquecimento Iniciar(int tempo, int potencia)
-    {    
-        if (potencia < 0 || potencia > 10)
+    public Aquecimento Iniciar(int tempo, int? potencia)
+    {
+        if (potencia == null)
+            potencia = 10;
+        else if (potencia < 0 || potencia > 10)
         {
             //return BadRequest("Valor inválido para potência!");
         }
-
-        var tempoSegundos = 0;
-        var tempoMinutos = 0;
 
         if (tempo < 0 || tempo > 200)
         {
             //return BadRequest("Valor inválido para o tempo!");
         }
-        else if (tempo > 60 && tempo < 100)
-        {
-            tempoSegundos = tempo % 60;
-            tempoMinutos = 1;
-        }
-        else
-        {
-            tempoSegundos = tempo % 100;
-            tempoMinutos = tempo / 100;
-        }
-
-        var tempoSpan = new TimeSpan(0, tempoMinutos, tempoSegundos);
-        return new Aquecimento(tempoSpan, potencia);
+        return new Aquecimento(GetTimeSpanFromTempo(tempo), potencia.Value);
     }
 
     public Aquecimento InicioRapido()
@@ -41,16 +28,36 @@ public class MicroondasService : IMicroondasService
 
     public Aquecimento Acrescento(int tempo, int potencia)
     {
-        return new Aquecimento(new TimeSpan(0, 0, 30), potencia);
-        //return new Aquecimento(tempo + new TimeSpan(0, 0, 30), potencia);
+        var timeSpan = GetTimeSpanFromTempo(tempo);
+        timeSpan += TimeSpan.FromSeconds(30);
+
+        return new Aquecimento(timeSpan, potencia);
     }
 
-    public Aquecimento Pausa(int tempo, int potencia, bool jaEstaPausado)
+    public Aquecimento Pausa(int tempo)
     {
         return new Aquecimento(new TimeSpan(0, 0, 0), 0);
         //if (jaEstaPausado)
         //    return new Aquecimento(new TimeSpan(0, 0, 0), 0);
         //else
         //return new Aquecimento();
+    }
+
+    private TimeSpan GetTimeSpanFromTempo(int tempo)
+    {
+        var tempoSegundos = 0;
+        var tempoMinutos = 0;
+
+        if (tempo > 60 && tempo < 100)
+        {
+            tempoSegundos = tempo % 60;
+            tempoMinutos = 1;
+        }
+        else
+        {
+            tempoSegundos = tempo % 100;
+            tempoMinutos = tempo / 100;
+        }
+        return new TimeSpan(0, tempoMinutos, tempoSegundos);
     }
 }
