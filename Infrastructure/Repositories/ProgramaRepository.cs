@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
+using Infrastructure.Shared;
 using System.Text.Json;
 
 namespace Infrastructure.Repositories;
@@ -7,14 +8,16 @@ namespace Infrastructure.Repositories;
 public class ProgramaRepository : IProgramaRepository
 {
     // Aqui normalmente teria o context, mas optei por fazer tudo em json
+    private readonly IProgramaValidatorService _validator;
 
-    private const string PROGRAMAS_PADROES_PATH = "../Infrastructure/jsons/programas-padroes.json";
-    private const string PROGRAMAS_PATH = "../Infrastructure/jsons/programas.json";
-
+    public ProgramaRepository(IProgramaValidatorService validator)
+    {
+        _validator = validator;
+    }
 
     public IEnumerable<Programa> GetProgramasPadroes()
     {
-        var json = File.ReadAllText(PROGRAMAS_PADROES_PATH);
+        var json = File.ReadAllText(Constants.PROGRAMAS_PADROES_PATH);
         var result = JsonSerializer.Deserialize<IEnumerable<Programa>>(json);
 
         return (result == null) ? Enumerable.Empty<Programa>() : result;
@@ -22,21 +25,21 @@ public class ProgramaRepository : IProgramaRepository
 
     public IEnumerable<Programa> GetAllCustom()
     {
-        var json = File.ReadAllText(PROGRAMAS_PATH);
+        var json = File.ReadAllText(Constants.PROGRAMAS_PATH);
         var programasSalvos = JsonSerializer.Deserialize<IEnumerable<Programa>>(json);
         return (programasSalvos == null) ? Enumerable.Empty<Programa>() : programasSalvos;
     }
 
-    // Implementação ruim de salvamento: necessita ler o .json inteiro para salvar um novo Programa.
     public void CreatePrograma(Programa programa)
     {
-        var json = File.ReadAllText(PROGRAMAS_PATH);
+        _validator.validate(programa);
+
+        var json = File.ReadAllText(Constants.PROGRAMAS_PATH);
         var programasSalvos = JsonSerializer.Deserialize<IEnumerable<Programa>>(json);
-        if (programasSalvos == null)
-            return;
 
         programasSalvos = programasSalvos.Append(programa);
         var result = JsonSerializer.Serialize(programasSalvos);
-        File.WriteAllText(PROGRAMAS_PATH, result);
+        File.WriteAllText(Constants.PROGRAMAS_PATH, result);
     }
+
 }
