@@ -1,6 +1,6 @@
-﻿namespace MicroondasDigital.api.ViewModels;
+﻿namespace Presentation.DTOs;
 
-public record CreateProgramaViewModel
+public record CreateProgramaDTO
 {
     public string Nome { get; set; }
     public string Alimento { get; set; }

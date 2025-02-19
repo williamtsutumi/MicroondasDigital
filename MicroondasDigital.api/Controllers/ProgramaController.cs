@@ -1,7 +1,7 @@
-﻿using MicroondasDigital.api.ViewModels;
+﻿using Presentation.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MicroondasDigital.api.Controllers;
+namespace Presentation.Controllers;
 
 [ApiController]
 [Route("[controller]")]
@@ -15,7 +15,7 @@ public class ProgramaController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreatePrograma([FromBody] CreateProgramaViewModel viewModel)
+    public IActionResult CreatePrograma([FromBody] CreateProgramaDTO viewModel)
     {
         return Ok(new
         {

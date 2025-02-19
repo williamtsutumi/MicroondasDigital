@@ -1,55 +1,29 @@
-using MicroondasDigital.api.ViewModels;
+using Presentation.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Domain.Interfaces;
 
-namespace MicroondasDigital.api.Controllers;
+namespace Presentation.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 public class MicroondasController : ControllerBase
 {
 
-    private readonly ILogger<MicroondasController> _logger;
+    private readonly IMicroondasService _service;
 
-    public MicroondasController(ILogger<MicroondasController> logger)
+    public MicroondasController(IMicroondasService service)
     {
-        _logger = logger;
+        _service = service;
     }
 
     [HttpPost("iniciar")]
-    public IActionResult Iniciar([FromBody] IniciarAquecimentoViewModel viewModel)
+    public IActionResult Iniciar([FromBody] IniciarAquecimentoDTO viewModel)
     {
-        if (viewModel.Potencia < 0 || viewModel.Potencia > 10)
-            return BadRequest("Valor inválido para potência!");
-        if (viewModel.Tempo < 0 || viewModel.Tempo > 200)
-            return BadRequest("Valor inválido para o tempo!");
-
-        var tempoSegundos = 0;
-        var tempoMinutos = 0;
-        var potencia = 0;
-        if (viewModel.Potencia == null)
-        {
-            potencia = 5;
-        }
-        if (viewModel.Tempo == null)
-        {
-            tempoSegundos = 30;
-            tempoMinutos = 0;
-        }
-        else if (viewModel.Tempo.Value > 60 && viewModel.Tempo.Value < 100)
-        {
-            tempoSegundos = viewModel.Tempo.Value % 60;
-            tempoMinutos = 1;
-        }
-        else
-        {
-            tempoSegundos = viewModel.Tempo.Value % 100;
-            tempoMinutos = viewModel.Tempo.Value / 100;
-        }
-
+        var result = _service.Iniciar(viewModel.Tempo, viewModel.Potencia);
         return Ok(new
         {
-            Tempo = tempoSegundos,
-            Potencia = potencia
+            Tempo = result.Item1,
+            Potencia = result.Item2
         });
     }
 }
