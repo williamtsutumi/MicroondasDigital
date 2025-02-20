@@ -30,6 +30,15 @@ Exemplos de corpo da requisição que podem ser utilizados:
   "instrucoes": "Recomenda-se espalhar uniformemente no prato para um aquecimento mais uniforme."
 }
 ```
+```javascript
+{
+  "nome": "Alimentos congelados",
+  "alimento": "Alimentos congelados",
+  "tempo": "0.00:10:00",
+  "potencia": 10,
+  "stringAquecimento": ">"
+}
+```
 
 Sobre o desenvolvimento e escolhas
 
