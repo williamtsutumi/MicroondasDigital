@@ -4,6 +4,7 @@ using Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Console.WriteLine("Version: {0}", Environment.Version.ToString());
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IMicroondasService, MicroondasService>();
 builder.Services.AddScoped<IProgramaRepository, ProgramaRepository>();
 builder.Services.AddScoped<IProgramaService, ProgramaService>();
+builder.Services.AddScoped<IProgramaValidatorService, ProgramaValidatorService>();
 
 builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
 {

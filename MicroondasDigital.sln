@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35806.99 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicroondasDigital", "MicroondasDigital\MicroondasDigital.csproj", "{8055EA69-76DB-49CC-8C8F-CCC0CF7E42A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "MicroondasDigital.api\Presentation.csproj", "{5D16E959-E925-42BD-8208-F437A9C17CA6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "Presentation\Presentation.csproj", "{5D16E959-E925-42BD-8208-F437A9C17CA6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{7F11C5E9-C7E0-495B-88B1-3A5E0E3614FE}"
 EndProject

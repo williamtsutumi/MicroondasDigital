@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Infrastructure.Services;
 
-class ProgramaValidatorService : IProgramaValidatorService
+public class ProgramaValidatorService : IProgramaValidatorService
 {
     public void validate(Programa programa)
     {
