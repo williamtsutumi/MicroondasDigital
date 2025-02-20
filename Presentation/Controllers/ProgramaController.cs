@@ -31,7 +31,7 @@ public class ProgramaController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("all-custom")]
+    [HttpGet("programas-customizados")]
     public IActionResult GetAllCustom()
     {
         var result = _service.GetAllCustom();
@@ -41,7 +41,7 @@ public class ProgramaController : ControllerBase
         });
     }
 
-    [HttpGet("get-programas-padroes")]
+    [HttpGet("programas-padroes")]
     public IActionResult GetProgramasPadroes()
     {
         var result = _service.GetProgramasPadroes();

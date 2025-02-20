@@ -12,7 +12,7 @@ app.controller('microondasController', function ($scope, $http) {
                 });
             },
             function (response) {
-                $scope.erro("Ocorreu algum erro ao carregar os programas!");
+                alert(response.data.error);
             }
         );
 
@@ -24,7 +24,7 @@ app.controller('microondasController', function ($scope, $http) {
                 });
             },
             function (response) {
-                $scope.erro("Ocorreu algum erro ao carregar os programas!");
+                alert(response.data.error);
             }
         );
     }
@@ -68,8 +68,8 @@ app.controller('microondasController', function ($scope, $http) {
 
                 setAquecimentoInterval(".");
             },
-            function () {
-                $scope.erro = "Ocorreu algum erro inesperado!";
+            function (response) {
+                alert(response.data.error);
             }
         );
     };

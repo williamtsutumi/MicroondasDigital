@@ -1,6 +1,8 @@
 using Domain.Interfaces;
+using Infrastructure.Exceptions;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +33,25 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(options => options.WithOrigins("http://localhost:5206").AllowAnyMethod());
+
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var ex = context.Features.Get<IExceptionHandlerFeature>()?.Error;
+
+        if (ex is ApiException apiException)
+        {
+            context.Response.StatusCode = 400;
+            await context.Response.WriteAsJsonAsync(new { error = apiException.Message });
+        }
+        else
+        {
+            context.Response.StatusCode = 500;
+            await context.Response.WriteAsJsonAsync(new { error = "An unexpected error occurred." });
+        }
+    });
+});
 
 app.UseAuthorization();
 
