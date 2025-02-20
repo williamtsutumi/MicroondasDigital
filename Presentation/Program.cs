@@ -3,6 +3,7 @@ using Infrastructure.Exceptions;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Diagnostics;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,8 +49,21 @@ app.UseExceptionHandler(errorApp =>
         }
         else
         {
+            var path = Directory.GetParent(Directory.GetCurrentDirectory()) + "\\Infrastructure\\Logs\\";
+            var log_name = path + DateTime.Now.ToString("dd-MM-yyyy_HH-mm-ss") + ".txt";
+            using (FileStream fs = File.Create(log_name))
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes("Inner exception:\r\n" + ex.Message);
+                fs.Write(bytes, 0, bytes.Length);
+
+                bytes = Encoding.UTF8.GetBytes("\r\n\r\nOuter exception:\r\n" + ex.ToString());
+                fs.Write(bytes, 0, bytes.Length);
+
+                bytes = Encoding.UTF8.GetBytes("\r\n\r\nStack trace:\r\n" + ex.StackTrace);
+                fs.Write(bytes, 0, bytes.Length);
+            }
             context.Response.StatusCode = 500;
-            await context.Response.WriteAsJsonAsync(new { error = "An unexpected error occurred." });
+            await context.Response.WriteAsJsonAsync(new { error = "Um erro inesperado aconteceu." });
         }
     });
 });

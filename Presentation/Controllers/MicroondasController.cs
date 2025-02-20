@@ -22,6 +22,8 @@ public class MicroondasController : ControllerBase
     [HttpPost("iniciar")]
     public IActionResult Iniciar([FromBody] IniciarAquecimentoDTO request)
     {
+        var a = 0;
+        a = 10 / a;
         Aquecimento result = _service.Iniciar(request.Tempo, request.Potencia, request.NomeDoPrograma);
         return Ok(new
         {
