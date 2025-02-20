@@ -1,17 +1,10 @@
 ﻿var app = angular.module('microondasModule', []);
 app.controller('microondasController', function ($scope, $http) {
 
-    $scope.tempo = NaN;
-    $scope.potencia = NaN;
-    $scope.erro = "";
-    $scope.estaAquecendo = false;
+    $scope.progresso = "";
 
     $scope.onInit = function () {
-        var request = {
-            method: 'GET',
-            url: 'http://localhost:5144/Programa/get-programas-padroes'
-        };
-        $http(request).then(
+        $http.get("http://localhost:5144/Programa/programas-padroes").then(
             function (response) {
                 $scope.programasPadroes = response.data;
                 $scope.programasPadroes.forEach((prog) => {
@@ -19,15 +12,11 @@ app.controller('microondasController', function ($scope, $http) {
                 });
             },
             function (response) {
-                console.log(response);
+                $scope.erro("Ocorreu algum erro ao carregar os programas!");
             }
         );
 
-        var request = {
-            method: 'GET',
-            url: 'http://localhost:5144/Programa/all-custom'
-        };
-        $http(request).then(
+        $http.get("http://localhost:5144/Programa/programas-customizados").then(
             function (response) {
                 $scope.programasCustomizados = response.data.programas;
                 $scope.programasCustomizados.forEach((prog) => {
@@ -35,33 +24,38 @@ app.controller('microondasController', function ($scope, $http) {
                 });
             },
             function (response) {
-                console.log(response);
+                $scope.erro("Ocorreu algum erro ao carregar os programas!");
             }
         );
     }
 
-    $scope.submit = function (programa) {
-        if (programa !== undefined)
-            $scope.programa = programa;
+    // Caso esteja começando um programa (customizado ou pré-definido),
+    // não precisa fazer request pois os dados já foram obtidos quando a página foi carregada
+    $scope.comecaPrograma = function (programa) {
+        $scope.programa = programa;
 
-        $scope.erro = "";
+        $scope.tempo = programa.tempo;
+        $scope.potencia = programa.potencia;
 
-        if ($scope.estaPausado) {
+        $scope.blockInputs = true;
+        $scope.estaPausado = false;
+        $scope.estaAquecendo = true;
+        $scope.progresso = "";
+        setAquecimentoInterval($scope.programa.stringAquecimento);
+    };
+
+    $scope.submit = function () {
+        if ($scope.estaPausado || $scope.programa !== undefined) {
             $scope.estaPausado = false;
             $scope.estaAquecendo = true;
             setAquecimentoInterval($scope.programa === undefined ? "." : $scope.programa.stringAquecimento);
             return;
         }
 
-        var request;
-        if (programa != undefined) {
-            $scope.blockInputs = true;
-            request = makeRequest(programa.tempo, programa.potencia, programa.nome);
-        }
-        else {
-            request = makeRequest(parseInt($scope.tempo), parseInt($scope.potencia), $scope.programa === undefined ? undefined : $scope.programa.nome);
-        }
+        $scope.erro = "";
+        $scope.progresso = "";
 
+        var request = makeRequest(parseInt($scope.tempo), parseInt($scope.potencia), $scope.programa === undefined ? undefined : $scope.programa.nome);
         $http(request).then(
             function (response) {
                 var tempoSegundos = parseInt(response.data.tempo.split(":")[2]);
@@ -69,13 +63,10 @@ app.controller('microondasController', function ($scope, $http) {
                 var tempoTotal = tempoSegundos + tempoMinutos * 60;
                 $scope.tempo = tempoTotal;
 
-                if (!$scope.tempo)
-                    $scope.tempo = tempoTotal;
-
                 $scope.potencia = response.data.potencia;
                 $scope.estaAquecendo = true;
 
-                setAquecimentoInterval(programa === undefined ? "." : programa.stringAquecimento);
+                setAquecimentoInterval(".");
             },
             function () {
                 $scope.erro = "Ocorreu algum erro inesperado!";
@@ -94,11 +85,15 @@ app.controller('microondasController', function ($scope, $http) {
             $scope.potencia = "";
             return;
         }
+
+        // Ainda nao tem nenhum progresso, apenas limpa os inputs
         if (!$scope.estaAquecendo) {
-            $scope.tempo = "";
-            $scope.potencia = "";
+            $scope.tempo = NaN;
+            $scope.potencia = NaN;
+            $scope.progresso = "";
             return;
         }
+
         $scope.estaPausado = true;
         $scope.estaAquecendo = false;
         clearInterval($scope.interval);
@@ -114,14 +109,14 @@ app.controller('microondasController', function ($scope, $http) {
                 nomeDoPrograma: nomeDoPrograma
             }
         };
-        if (isNaN(tempo) && isNaN(potencia))
+        if (isNaN(tempo) && isNaN(potencia)) {
             request.url += "inicio-rapido";
+        }
         else if ($scope.estaAquecendo) {
-            $scope.progresso = " ";
             request.url += "acrescento";
         }
         else {
-            $scope.progresso = " ";
+            $scope.progresso = "";
             request.url += "iniciar";
         }
         return request;
@@ -140,6 +135,7 @@ app.controller('microondasController', function ($scope, $http) {
             clearInterval($scope.interval);
             if ($scope.tempo == 0) {
                 $scope.progresso += " Aquecimento concluído";
+                $scope.programa = undefined;
                 $scope.estaPausado = false;
                 $scope.estaAquecendo = false;
                 $scope.tempo = NaN;

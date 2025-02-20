@@ -12,10 +12,10 @@
 <div ng-app="microondasModule" ng-controller="microondasController">
     <form ng-submit="submit()" ng-init="onInit()">
         <div class="row justify-content-between">
-            <button ng-repeat="programa in programasPadroes" type="button" class="btn btn-warning col-2" ng-click="submit(programa)">{{ programa.nome }}</button>
+            <button ng-repeat="programa in programasPadroes" type="button" class="btn btn-warning col-2" ng-click="comecaPrograma(programa)">{{ programa.nome }}</button>
         </div>
         <div class="row justify-content-between mt-4">
-            <button ng-repeat="programa in programasCustomizados" type="button" class="btn btn-warning col-2" ng-click="submit(programa)"><i>{{ programa.nome }}</i></button>
+            <button ng-repeat="programa in programasCustomizados" type="button" class="btn btn-warning col-2" ng-click="comecaPrograma(programa)"><i>{{ programa.nome }}</i></button>
         </div>
         <div class="col-12 mt-4">
             <div class="row">
@@ -34,8 +34,8 @@
     </form>
 
     <span class="row" ng-if="estaPausado">Processo de aquecimento pausado!</span>
-    <span class="row" ng-if="estaAquecendo">Processo de aquecimento iniciado!</span>
-    <span class="row" ng-if="estaAquecendo || estaPausado || mostrarProgresso">Progresso: <span ng-bind="progresso"></span></span>
+    <span class="row" ng-if="estaAquecendo || progresso.includes('concluído')">Processo de aquecimento iniciado!</span>
+    <span class="row" ng-if="estaAquecendo || estaPausado || progresso.includes('concluído')">Progresso: <span ng-bind="progresso"></span></span>
 
     <div ng-if="erro.length > 0">
         <span ng-bind="erro"></span>
