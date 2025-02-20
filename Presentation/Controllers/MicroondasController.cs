@@ -1,8 +1,8 @@
-using Presentation.DTOs;
-using Microsoft.AspNetCore.Mvc;
-using Domain.Interfaces;
 using Domain.Entities;
+using Domain.Interfaces;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using Presentation.DTOs;
 
 namespace Presentation.Controllers;
 
