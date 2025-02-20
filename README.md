@@ -1,5 +1,16 @@
 Olá, esta é minha solução para o teste de desenvolvimento do micro-ondas digital, atendendo aos requisitos do nível 3.
 
+Para atender ao nível 4, está faltando implementar os requisitos de autenticação.
+
+Sobre o desenvolvimento e escolhas
+
+- Todo o desenvolvimento foi realizado com Visual Studio
+- Foi utilizado AngularJS para a interface
+- A Persistência dos dados foi feita em arquivos .json
+- Também tentei criar uma estrutura de pastas levando em conta conceitos de arquitetura limpa e SOLID
+
+Por fim, considerando que havia 1 ano que eu não utilizava C#, fiquei razoavelmente satisfeito com o resultado.
+
 Execução:
 - O projeto MicroondasDigital é a parte visual.
 - O projeto Presentation é a API.
@@ -39,12 +50,3 @@ Exemplos de corpo da requisição que podem ser utilizados:
   "stringAquecimento": ">"
 }
 ```
-
-Sobre o desenvolvimento e escolhas
-
-- Todo o desenvolvimento foi realizado com Visual Studio
-- Foi utilizado AngularJS para a interface
-- A Persistência dos dados foi feita em arquivos .json
-- Também tentei criar uma estrutura de pastas levando em conta conceitos de arquitetura limpa e SOLID
-
-Por fim, considerando que havia 1 ano que eu não utilizava C#, fiquei razoávelmente satisfeito com o resultado.
