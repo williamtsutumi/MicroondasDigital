@@ -6,10 +6,11 @@ Sobre o desenvolvimento e escolhas
 
 - Todo o desenvolvimento foi realizado com Visual Studio
 - Foi utilizado AngularJS para a interface
-- A Persistência dos dados foi feita em arquivos .json
+- A Persistência dos dados e logging foi feita em arquivos .json
 - Também tentei criar uma estrutura de pastas levando em conta conceitos de arquitetura limpa e SOLID
+- Por fim, considerando que havia 1 ano que eu não utilizava C#, fiquei razoavelmente satisfeito com o resultado
 
-Por fim, considerando que havia 1 ano que eu não utilizava C#, fiquei razoavelmente satisfeito com o resultado.
+
 
 Execução:
 - O projeto MicroondasDigital é a parte visual.
