@@ -1,24 +1,23 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
-using Infrastructure.Exceptions;
 
 namespace Infrastructure.Services;
 
 public class MicroondasService : IMicroondasService
 {
+    private readonly IMicroondasValidatorService _validator;
+
+    public MicroondasService(IMicroondasValidatorService validator)
+    {
+        _validator = validator;
+    }
+
     public Aquecimento Iniciar(int tempo, int? potencia, string? nomeDoPrograma)
     {
+        _validator.validateIniciar(tempo, potencia, nomeDoPrograma);
+
         if (potencia == null)
             potencia = 10;
-
-        if (nomeDoPrograma == null)
-        {
-            if (potencia < 1 || potencia > 10)
-                throw new ApiException("Valor de potência inválido. Favor utilizar um valor de 1 a 10");
-
-            if (tempo < 1 || tempo > 200)
-                throw new ApiException("Valor de tempo inválido. Favor utilizar um valor de 1 a 200.");
-        }
 
         return new Aquecimento(GetTimeSpanFromTempo(tempo), potencia.Value);
     }
@@ -30,16 +29,12 @@ public class MicroondasService : IMicroondasService
 
     public Aquecimento Acrescento(int tempo, int? potencia, string? nomeDoPrograma)
     {
-        if (potencia == null)
-            throw new ApiException("O valor de potência deve ser informado.");
-
-        if (nomeDoPrograma != null)
-            throw new ApiException("Não é possível incrementar o tempo de um programa pré-definido.");
+        _validator.validateAcrescento(potencia, nomeDoPrograma);
 
         var timeSpan = GetTimeSpanFromTempo(tempo);
         timeSpan += TimeSpan.FromSeconds(30);
 
-        return new Aquecimento(timeSpan, potencia.Value);
+        return new Aquecimento(timeSpan, potencia!.Value);
     }
 
     private TimeSpan GetTimeSpanFromTempo(int tempo)

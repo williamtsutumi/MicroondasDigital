@@ -13,9 +13,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IMicroondasService, MicroondasService>();
-builder.Services.AddScoped<IProgramaRepository, ProgramaRepository>();
 builder.Services.AddScoped<IProgramaService, ProgramaService>();
+builder.Services.AddScoped<IProgramaRepository, ProgramaRepository>();
 builder.Services.AddScoped<IProgramaValidatorService, ProgramaValidatorService>();
+builder.Services.AddScoped<IMicroondasValidatorService, MicroondasValidatorService>();
 
 builder.Services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
 {
